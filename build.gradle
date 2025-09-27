@@ -1,0 +1,75 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.dio'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //Cucumber + JUnit 4
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit
+    testImplementation("io.cucumber:cucumber-junit:7.23.0")
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-java
+    implementation("io.cucumber:cucumber-java:7.23.0")
+
+    //JUnit 4
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.13.4")
+
+//    //JUnit 5
+//    testImplementation platform('org.junit:junit-bom:5.10.0')
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
+//
+//    //Cucumber + JUnit 5
+//    testImplementation 'io.cucumber:cucumber-java:7.18.1'
+//    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.18.1'
+//
+//    // Suite API (WAJIB supaya @Suite dikenali)
+//    // ✅ JUnit Platform Suite API (untuk @Suite, @IncludeEngines, dll)
+//    testImplementation "org.junit.platform:junit-platform-suite"
+
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    implementation("org.seleniumhq.selenium:selenium-java:4.34.0")
+    // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
+    implementation("io.github.bonigarcia:webdrivermanager:6.1.0")
+
+}
+
+test {
+//    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
+    configurations {
+        cucumberRuntime {
+            extendsFrom testImplementation
+        }
+    }
+
+    def tags = (findProperty('tags') == null) ? 'not @exclude' : findProperty('tags') + ' and not @exclude'
+
+     tasks.register('cucumber', JavaExec){
+         description("Running Cucumber Test")
+         group = 'verification'
+
+        dependsOn assemble, compileTestJava
+
+
+                mainClass = "io.cucumber.core.cli.Main"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+                args = [
+                        '--plugin', 'html:reports/test-report-html',
+                        '--plugin', 'pretty',
+                        '--glue', 'com.dio',
+                        '--tags', "${tags}",
+                        'src/test/resources'
+                ]
+        }
+}
