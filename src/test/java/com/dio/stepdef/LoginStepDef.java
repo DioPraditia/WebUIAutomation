@@ -47,5 +47,6 @@ public class LoginStepDef extends BaseTest {
     @Then("user able to see error message {string}")
     public void userAbleToSeeErrorMessage(String errorMessage) {
         loginPage.validateErrorAppear(errorMessage);
+        assertTrue(driver.getPageSource().contains(errorMessage));
     }
 }
