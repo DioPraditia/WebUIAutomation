@@ -1,4 +1,4 @@
-# web-ui-automation
+# WebUIAutomation
 HOMEWORK MODULE 14 JAYJAY
 
 # Web UI Automation Framework (Selenium + Cucumber + JUnit 4 + Gradle)
@@ -54,3 +54,4 @@ webUIAutomation14/
 │       |  └── resources
 │           └── features/            # Gherkin
 │               └── login.feature
+
