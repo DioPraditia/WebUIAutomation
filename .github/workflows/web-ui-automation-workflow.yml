@@ -25,10 +25,7 @@ jobs:
     # install browser
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v2.1.0
-      with:
-          chrome-version: latest # Ganti dengan 'stable' untuk versi stabil
-          chrome-options: '--headless' #(Jika ingin menjalankan Chrome dalam mode headless)          
-       
+     
     # setup gradlew
     - name: Setup gradlew
       run: chmod +x gradlew 
